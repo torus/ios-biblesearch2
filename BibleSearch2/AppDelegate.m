@@ -8,25 +8,14 @@
 
 #import "AppDelegate.h"
 
-#import "lua.h"
-#import "lualib.h"
-#import "lauxlib.h"
-#import "LuaBridge.h"
-
 @interface AppDelegate ()
 
 @end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    lua_State *L = [[LuaBridge instance] L];
-    if (luaL_dostring(L, "print(objc.context)")) {
-        const char *error = lua_tostring(L, -1);
-        NSLog(@"Lua Error: %s", error);
-    }
     return YES;
 }
 

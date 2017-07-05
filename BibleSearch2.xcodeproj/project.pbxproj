@@ -49,6 +49,8 @@
 		9CF9C93B1F003C1D0013F9D0 /* lutf8lib.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CF9C9181F003C1D0013F9D0 /* lutf8lib.c */; };
 		9CF9C93C1F003C1D0013F9D0 /* lvm.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CF9C9191F003C1D0013F9D0 /* lvm.c */; };
 		9CF9C93D1F003C1D0013F9D0 /* lzio.c in Sources */ = {isa = PBXBuildFile; fileRef = 9CF9C91B1F003C1D0013F9D0 /* lzio.c */; };
+		9CF9C93F1F0191D00013F9D0 /* biblesearch2.lua in Resources */ = {isa = PBXBuildFile; fileRef = 9CF9C93E1F0191D00013F9D0 /* biblesearch2.lua */; };
+		9CF9C9401F0191D00013F9D0 /* biblesearch2.lua in Resources */ = {isa = PBXBuildFile; fileRef = 9CF9C93E1F0191D00013F9D0 /* biblesearch2.lua */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +140,7 @@
 		9CF9C91A1F003C1D0013F9D0 /* lvm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lvm.h; path = "../../lualander/luaobjc/LuaObjCBridge/lua-5.3.4/src/lvm.h"; sourceTree = "<group>"; };
 		9CF9C91B1F003C1D0013F9D0 /* lzio.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; name = lzio.c; path = "../../lualander/luaobjc/LuaObjCBridge/lua-5.3.4/src/lzio.c"; sourceTree = "<group>"; };
 		9CF9C91C1F003C1D0013F9D0 /* lzio.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = lzio.h; path = "../../lualander/luaobjc/LuaObjCBridge/lua-5.3.4/src/lzio.h"; sourceTree = "<group>"; };
+		9CF9C93E1F0191D00013F9D0 /* biblesearch2.lua */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = biblesearch2.lua; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -193,6 +196,7 @@
 				9CF9C8C41F003B1B0013F9D0 /* LaunchScreen.storyboard */,
 				9CF9C8C71F003B1B0013F9D0 /* Info.plist */,
 				9CF9C8B61F003B1B0013F9D0 /* Supporting Files */,
+				9CF9C93E1F0191D00013F9D0 /* biblesearch2.lua */,
 			);
 			path = BibleSearch2;
 			sourceTree = "<group>";
@@ -366,6 +370,7 @@
 			files = (
 				9CF9C8C61F003B1B0013F9D0 /* LaunchScreen.storyboard in Resources */,
 				9CF9C8C31F003B1B0013F9D0 /* Assets.xcassets in Resources */,
+				9CF9C93F1F0191D00013F9D0 /* biblesearch2.lua in Resources */,
 				9CF9C8E01F003B9B0013F9D0 /* utils.lua in Resources */,
 				9CF9C8C11F003B1B0013F9D0 /* Main.storyboard in Resources */,
 			);
@@ -375,6 +380,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9CF9C9401F0191D00013F9D0 /* biblesearch2.lua in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
