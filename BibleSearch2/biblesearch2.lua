@@ -5,12 +5,32 @@ function init(viewController)
    print("init", viewController)
 
    local ctx = objc.context:create()
-   local tableview = ctx:wrap(objc.class.UITableView)('alloc')(
-      'initWithFrame:style:',
-         -(ctx:wrap(objc.class.UIApplication)('sharedApplication')('keyWindow')('frame')),
-      UITableViewStylePlain)
-
    local st = ctx.stack
+
+   local frame = -(ctx:wrap(objc.class.UIApplication)('sharedApplication')('keyWindow')('frame'))
+   local statbarheight = 20
+
+   objc.push(st, frame)
+   local x, y, w, h = objc.extract(st, 'CGRect')
+   print('frame', x, y, w, h)
+
+   objc.push(st, h - statbarheight)
+   objc.push(st, w)
+   objc.push(st, statbarheight)
+   objc.push(st, x)
+   objc.operate(st, 'cgrectmake')
+   local bodyframe = objc.pop(st)
+
+   objc.push(st, bodyframe)
+   local x, y, w, h = objc.extract(st, 'CGRect')
+   print('frame', x, y, w, h)
+
+   local rootview = ctx:wrap(objc.class.UIView)('alloc')('initWithFrame:', bodyframe)
+   rootview('setBackgroundColor:', -ctx:wrap(objc.class.UIColor)('whiteColor'))
+
+   local tableview = ctx:wrap(objc.class.UITableView)('alloc')(
+      'initWithFrame:style:', bodyframe, UITableViewStylePlain)
+
    objc.push(st, 'BSTableViewDataSource')
    objc.operate(st, 'addClass')
    objc.push(st, objc.class.BSTableViewDataSource)
@@ -24,7 +44,7 @@ function init(viewController)
                 print("index", index('section'), index('row'))
                 local cell = ctx:wrap(objc.class.UITableViewCell)('alloc')(
                    'initWithStyle:reuseIdentifier:', UITableViewCellStyleDefault, 'hoge')
-                cell('textLabel')('setText:', 'ahoaho')
+                cell('textLabel')('setText:', 'ahoaho' .. index('section') .. index('row'))
                 return -cell
              end
    )
@@ -37,7 +57,7 @@ function init(viewController)
              function (self, cmd, view, section)
                 print("num of rows", section)
                 if section < 1 then
-                   return 1
+                   return 5
                 else
                    return 0
                 end
@@ -48,7 +68,8 @@ function init(viewController)
    local src = ctx:wrap(objc.class.BSTableViewDataSource)('alloc')('init')
    tableview('setDataSource:', -src)
 
-   ctx:wrap(viewController)('setView:', -tableview)
+   rootview('addSubview:', -tableview)
+   ctx:wrap(viewController)('setView:', -rootview)
 end
 
 print "biblesearch2 loaded"
