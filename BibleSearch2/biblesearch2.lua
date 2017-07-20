@@ -12,14 +12,10 @@ function init(viewController)
    objc.push(st, frame)
    local x, y, w, h = objc.extract(st, 'CGRect')
 
-   -- search bar
-   local headerframe = make_frame(st, 0, 0, w, 44)
-   local searchbar = ctx:wrap(objc.class.UISearchBar)('alloc')('initWithFrame:', headerframe)
-
    local bodyframe = make_frame(st, x, statbarheight, w, h - statbarheight)
    print_frame(st, bodyframe)
 
-   local rootview = ctx:wrap(objc.class.UIView)('alloc')('initWithFrame:', bodyframe)
+   local rootview = ctx:wrap(objc.class.UIView)('alloc')('initWithFrame:', frame)
    rootview('setBackgroundColor:', -ctx:wrap(objc.class.UIColor)('whiteColor'))
 
    local tableview = ctx:wrap(objc.class.UITableView)('alloc')(
@@ -28,6 +24,10 @@ function init(viewController)
    local datasrccls = create_data_source_class(ctx)
    local src = datasrccls('alloc')('init')
    tableview('setDataSource:', -src)
+
+   -- search bar
+   local headerframe = make_frame(st, 0, 0, w, 44)
+   local searchbar = ctx:wrap(objc.class.UISearchBar)('alloc')('initWithFrame:', headerframe)
    tableview('setTableHeaderView:', -searchbar)
 
    rootview('addSubview:', -tableview)
