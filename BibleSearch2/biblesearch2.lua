@@ -15,21 +15,10 @@ function init(viewController)
    print('frame', x, y, w, h)
 
    -- search bar
-   objc.push(st, 44)
-   objc.push(st, w)
-   objc.push(st, 0)
-   objc.push(st, 0)
-   objc.operate(st, 'cgrectmake')
-   local headerframe = objc.pop(st)
-
+   local headerframe = make_frame(st, 0, 0, w, 44)
    local searchbar = ctx:wrap(objc.class.UISearchBar)('alloc')('initWithFrame:', headerframe)
 
-   objc.push(st, h - statbarheight)
-   objc.push(st, w)
-   objc.push(st, statbarheight)
-   objc.push(st, x)
-   objc.operate(st, 'cgrectmake')
-   local bodyframe = objc.pop(st)
+   local bodyframe = make_frame(st, x, statbarheight, w, h - statbarheight)
 
    objc.push(st, bodyframe)
    local x, y, w, h = objc.extract(st, 'CGRect')
@@ -82,6 +71,15 @@ function init(viewController)
 
    rootview('addSubview:', -tableview)
    ctx:wrap(viewController)('setView:', -rootview)
+end
+
+function make_frame(st, x, y, w, h)
+   objc.push(st, h)
+   objc.push(st, w)
+   objc.push(st, y)
+   objc.push(st, x)
+   objc.operate(st, 'cgrectmake')
+   return objc.pop(st)
 end
 
 print "biblesearch2 loaded"
