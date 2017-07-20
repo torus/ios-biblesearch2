@@ -9,20 +9,15 @@ function init(viewController)
 
    local frame = -(ctx:wrap(objc.class.UIApplication)('sharedApplication')('keyWindow')('frame'))
    local statbarheight = 20
-
    objc.push(st, frame)
    local x, y, w, h = objc.extract(st, 'CGRect')
-   print('frame', x, y, w, h)
 
    -- search bar
    local headerframe = make_frame(st, 0, 0, w, 44)
    local searchbar = ctx:wrap(objc.class.UISearchBar)('alloc')('initWithFrame:', headerframe)
 
    local bodyframe = make_frame(st, x, statbarheight, w, h - statbarheight)
-
-   objc.push(st, bodyframe)
-   local x, y, w, h = objc.extract(st, 'CGRect')
-   print('frame', x, y, w, h)
+   print_frame(st, bodyframe)
 
    local rootview = ctx:wrap(objc.class.UIView)('alloc')('initWithFrame:', bodyframe)
    rootview('setBackgroundColor:', -ctx:wrap(objc.class.UIColor)('whiteColor'))
@@ -37,6 +32,12 @@ function init(viewController)
 
    rootview('addSubview:', -tableview)
    ctx:wrap(viewController)('setView:', -rootview)
+end
+
+function print_frame(st, frame, name)
+   objc.push(st, frame)
+   local x, y, w, h = objc.extract(st, 'CGRect')
+   print(name or "frame", x, y, w, h)
 end
 
 function create_data_source_class(ctx)
