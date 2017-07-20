@@ -14,6 +14,16 @@ function init(viewController)
    local x, y, w, h = objc.extract(st, 'CGRect')
    print('frame', x, y, w, h)
 
+   -- search bar
+   objc.push(st, 44)
+   objc.push(st, w)
+   objc.push(st, 0)
+   objc.push(st, 0)
+   objc.operate(st, 'cgrectmake')
+   local headerframe = objc.pop(st)
+
+   local searchbar = ctx:wrap(objc.class.UISearchBar)('alloc')('initWithFrame:', headerframe)
+
    objc.push(st, h - statbarheight)
    objc.push(st, w)
    objc.push(st, statbarheight)
@@ -31,6 +41,7 @@ function init(viewController)
    local tableview = ctx:wrap(objc.class.UITableView)('alloc')(
       'initWithFrame:style:', bodyframe, UITableViewStylePlain)
 
+   -- data source class
    objc.push(st, 'BSTableViewDataSource')
    objc.operate(st, 'addClass')
    objc.push(st, objc.class.BSTableViewDataSource)
@@ -67,6 +78,7 @@ function init(viewController)
 
    local src = ctx:wrap(objc.class.BSTableViewDataSource)('alloc')('init')
    tableview('setDataSource:', -src)
+   tableview('setTableHeaderView:', -searchbar)
 
    rootview('addSubview:', -tableview)
    ctx:wrap(viewController)('setView:', -rootview)
