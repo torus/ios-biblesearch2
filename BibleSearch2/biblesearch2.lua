@@ -30,6 +30,18 @@ function init(viewController)
    local tableview = ctx:wrap(objc.class.UITableView)('alloc')(
       'initWithFrame:style:', bodyframe, UITableViewStylePlain)
 
+   local datasrccls = create_data_source_class(ctx)
+   local src = datasrccls('alloc')('init')
+   tableview('setDataSource:', -src)
+   tableview('setTableHeaderView:', -searchbar)
+
+   rootview('addSubview:', -tableview)
+   ctx:wrap(viewController)('setView:', -rootview)
+end
+
+function create_data_source_class(ctx)
+   local st = ctx.stack
+
    -- data source class
    objc.push(st, 'BSTableViewDataSource')
    objc.operate(st, 'addClass')
@@ -65,12 +77,7 @@ function init(viewController)
    )
    objc.operate(st, 'addMethod')
 
-   local src = ctx:wrap(objc.class.BSTableViewDataSource)('alloc')('init')
-   tableview('setDataSource:', -src)
-   tableview('setTableHeaderView:', -searchbar)
-
-   rootview('addSubview:', -tableview)
-   ctx:wrap(viewController)('setView:', -rootview)
+   return ctx:wrap(objc.class.BSTableViewDataSource)
 end
 
 function make_frame(st, x, y, w, h)
