@@ -25,6 +25,10 @@ function init(viewController)
    local src = datasrccls('alloc')('init')
    tableview('setDataSource:', -src)
 
+   local delegate = create_delegate_class(ctx)
+   local del = delegate('alloc')('init')
+   tableview('setDelegate:', del)
+
    -- search bar
    local headerframe = make_frame(st, 0, 0, w, 44)
    local searchbar = ctx:wrap(objc.class.UISearchBar)('alloc')('initWithFrame:', headerframe)
@@ -79,6 +83,37 @@ function create_data_source_class(ctx)
    objc.operate(st, 'addMethod')
 
    return ctx:wrap(objc.class.BSTableViewDataSource)
+end
+
+function create_delegate_class(ctx)
+   local st = ctx.stack
+
+   -- data source class
+   objc.push(st, 'BSTableViewDelegate')
+   objc.operate(st, 'addClass')
+
+   objc.push(st, objc.class.BSTableViewDelegate)
+   objc.push(st, 'tableView:didSelectRowAtIndexPath:')
+   objc.push(st, 'v@:@@')
+   objc.push(st,
+             function (self, cmd, table_view, index_path)
+                print("selected cell", table_view, index_path)
+             end
+   )
+   objc.operate(st, 'addMethod')
+
+   objc.push(st, objc.class.BSTableViewDelegate)
+   objc.push(st, 'tableView:willSelectRowAtIndexPath:')
+   objc.push(st, '@@:@@')
+   objc.push(st,
+             function (self, cmd, table_view, index_path)
+                print("will select cell", table_view, index_path)
+                return index_path
+             end
+   )
+   objc.operate(st, 'addMethod')
+
+   return ctx:wrap(objc.class.BSTableViewDelegate)
 end
 
 function make_frame(st, x, y, w, h)
