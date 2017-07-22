@@ -27,7 +27,7 @@ function init(viewController)
 
    local delegate = create_delegate_class(ctx)
    local del = delegate('alloc')('init')
-   tableview('setDelegate:', del)
+   tableview('setDelegate:', -del)
 
    -- search bar
    local headerframe = make_frame(st, 0, 0, w, 44)
@@ -49,6 +49,7 @@ function create_data_source_class(ctx)
 
    -- data source class
    objc.push(st, 'BSTableViewDataSource')
+   objc.push(st, objc.class.NSObject)
    objc.operate(st, 'addClass')
    objc.push(st, objc.class.BSTableViewDataSource)
    objc.push(st, 'tableView:cellForRowAtIndexPath:')
@@ -90,6 +91,7 @@ function create_delegate_class(ctx)
 
    -- data source class
    objc.push(st, 'BSTableViewDelegate')
+   objc.push(st, objc.class.NSObject)
    objc.operate(st, 'addClass')
 
    objc.push(st, objc.class.BSTableViewDelegate)
