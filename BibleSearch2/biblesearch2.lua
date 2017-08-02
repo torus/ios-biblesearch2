@@ -33,6 +33,9 @@ function init(viewController)
    local headerframe = make_frame(st, 0, 0, w, 44)
    local searchbar = ctx:wrap(objc.class.UISearchBar)('alloc')('initWithFrame:', headerframe)
    tableview('setTableHeaderView:', -searchbar)
+   local searchdelegate = create_searchbar_delegate_class(ctx)
+   local searchdel = searchdelegate('alloc')('init')
+   searchbar('setDelegate:', -searchdel)
 
    rootview('addSubview:', -tableview)
    ctx:wrap(viewController)('setView:', -rootview)
@@ -42,6 +45,27 @@ function print_frame(st, frame, name)
    objc.push(st, frame)
    local x, y, w, h = objc.extract(st, 'CGRect')
    print(name or "frame", x, y, w, h)
+end
+
+function create_searchbar_delegate_class(ctx)
+   local st = ctx.stack
+
+   -- data source class
+   objc.push(st, 'BSSearchBarDelegate')
+   objc.push(st, objc.class.NSObject)
+   objc.operate(st, 'addClass')
+
+   objc.push(st, objc.class.BSSearchBarDelegate)
+   objc.push(st, 'searchBar:textDidChange:')
+   objc.push(st, 'v@:@@')
+   objc.push(st,
+             function (self, cmd, search_bar, search_text)
+                print ('search', search_text)
+             end
+   )
+   objc.operate(st, 'addMethod')
+
+   return ctx:wrap(objc.class.BSSearchBarDelegate)
 end
 
 function create_data_source_class(ctx)
