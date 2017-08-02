@@ -71,6 +71,13 @@ function create_searchbar_delegate_class(ctx)
               end
    )
 
+   add_method(ctx, objc.class.BSSearchBarDelegate, 'searchBarSearchButtonClicked:', 'v@:@',
+              function (self, cmd, search_bar)
+                 print('search button clicked!')
+                 ctx:wrap(search_bar)('resignFirstResponder')
+              end
+   )
+
    return ctx:wrap(objc.class.BSSearchBarDelegate)
 end
 
