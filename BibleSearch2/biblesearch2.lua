@@ -47,6 +47,16 @@ function print_frame(st, frame, name)
    print(name or "frame", x, y, w, h)
 end
 
+function add_method(ctx, cls, name, signature, proc)
+   local st = ctx.stack
+
+   objc.push(st, cls)
+   objc.push(st, name)
+   objc.push(st, signature)
+   objc.push(st, proc)
+   objc.operate(st, 'addMethod')
+end
+
 function create_searchbar_delegate_class(ctx)
    local st = ctx.stack
 
@@ -55,15 +65,11 @@ function create_searchbar_delegate_class(ctx)
    objc.push(st, objc.class.NSObject)
    objc.operate(st, 'addClass')
 
-   objc.push(st, objc.class.BSSearchBarDelegate)
-   objc.push(st, 'searchBar:textDidChange:')
-   objc.push(st, 'v@:@@')
-   objc.push(st,
-             function (self, cmd, search_bar, search_text)
-                print ('search', search_text)
-             end
+   add_method(ctx, objc.class.BSSearchBarDelegate, 'searchBar:textDidChange:', 'v@:@@',
+              function (self, cmd, search_bar, search_text)
+                 print ('search', search_text)
+              end
    )
-   objc.operate(st, 'addMethod')
 
    return ctx:wrap(objc.class.BSSearchBarDelegate)
 end
@@ -75,37 +81,30 @@ function create_data_source_class(ctx)
    objc.push(st, 'BSTableViewDataSource')
    objc.push(st, objc.class.NSObject)
    objc.operate(st, 'addClass')
-   objc.push(st, objc.class.BSTableViewDataSource)
-   objc.push(st, 'tableView:cellForRowAtIndexPath:')
-   objc.push(st, '@@:@@')
-   objc.push(st,
-             function (self, cmd, table_view, index_path)
-                print("cell", table_view, index_path)
-                local ctx = objc.context:create()
-                local index = ctx:wrap(index_path)
-                print("index", index('section'), index('row'))
-                local cell = ctx:wrap(objc.class.UITableViewCell)('alloc')(
-                   'initWithStyle:reuseIdentifier:', UITableViewCellStyleDefault, 'hoge')
-                cell('textLabel')('setText:', 'ahoaho' .. index('section') .. index('row'))
-                return -cell
-             end
-   )
-   objc.operate(st, 'addMethod')
 
-   objc.push(st, objc.class.BSTableViewDataSource)
-   objc.push(st, 'tableView:numberOfRowsInSection:')
-   objc.push(st, 'l@:@l')
-   objc.push(st,
-             function (self, cmd, view, section)
-                print("num of rows", section)
-                if section < 1 then
-                   return 5
-                else
-                   return 0
-                end
-             end
+   add_method(ctx, objc.class.BSTableViewDataSource, 'tableView:cellForRowAtIndexPath:', '@@:@@',
+              function (self, cmd, table_view, index_path)
+                 print("cell", table_view, index_path)
+                 local ctx = objc.context:create()
+                 local index = ctx:wrap(index_path)
+                 print("index", index('section'), index('row'))
+                 local cell = ctx:wrap(objc.class.UITableViewCell)('alloc')(
+                    'initWithStyle:reuseIdentifier:', UITableViewCellStyleDefault, 'hoge')
+                 cell('textLabel')('setText:', 'ahoaho' .. index('section') .. index('row'))
+                 return -cell
+              end
    )
-   objc.operate(st, 'addMethod')
+
+   add_method(ctx, objc.class.BSTableViewDataSource, 'tableView:numberOfRowsInSection:', 'l@:@l',
+              function (self, cmd, view, section)
+                 print("num of rows", section)
+                 if section < 1 then
+                    return 5
+                 else
+                    return 0
+                 end
+              end
+   )
 
    return ctx:wrap(objc.class.BSTableViewDataSource)
 end
@@ -118,26 +117,18 @@ function create_delegate_class(ctx)
    objc.push(st, objc.class.NSObject)
    objc.operate(st, 'addClass')
 
-   objc.push(st, objc.class.BSTableViewDelegate)
-   objc.push(st, 'tableView:didSelectRowAtIndexPath:')
-   objc.push(st, 'v@:@@')
-   objc.push(st,
-             function (self, cmd, table_view, index_path)
-                print("selected cell", table_view, index_path)
-             end
+   add_method(ctx, objc.class.BSTableViewDelegate, 'tableView:didSelectRowAtIndexPath:', 'v@:@@',
+              function (self, cmd, table_view, index_path)
+                 print("selected cell", table_view, index_path)
+              end
    )
-   objc.operate(st, 'addMethod')
 
-   objc.push(st, objc.class.BSTableViewDelegate)
-   objc.push(st, 'tableView:willSelectRowAtIndexPath:')
-   objc.push(st, '@@:@@')
-   objc.push(st,
-             function (self, cmd, table_view, index_path)
-                print("will select cell", table_view, index_path)
-                return index_path
-             end
+   add_method(ctx, objc.class.BSTableViewDelegate, 'tableView:willSelectRowAtIndexPath:', '@@:@@',
+              function (self, cmd, table_view, index_path)
+                 print("will select cell", table_view, index_path)
+                 return index_path
+              end
    )
-   objc.operate(st, 'addMethod')
 
    return ctx:wrap(objc.class.BSTableViewDelegate)
 end
