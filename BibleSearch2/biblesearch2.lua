@@ -25,10 +25,6 @@ function init(viewController)
    local src = datasrccls('alloc')('init')
    tableview('setDataSource:', -src)
 
-   local delegate = create_delegate_class(ctx)
-   local del = delegate('alloc')('init')
-   tableview('setDelegate:', -del)
-
    -- search bar
    local headerframe = make_frame(st, 0, 0, w, 44)
    local searchbar = ctx:wrap(objc.class.UISearchBar)('alloc')('initWithFrame:', headerframe)
@@ -36,6 +32,10 @@ function init(viewController)
    local searchdelegate = create_searchbar_delegate_class(ctx)
    local searchdel = searchdelegate('alloc')('init')
    searchbar('setDelegate:', -searchdel)
+
+   local delegate = create_tableview_delegate_class(ctx, searchbar)
+   local del = delegate('alloc')('init')
+   tableview('setDelegate:', -del)
 
    rootview('addSubview:', -tableview)
    ctx:wrap(viewController)('setView:', -rootview)
@@ -116,7 +116,7 @@ function create_data_source_class(ctx)
    return ctx:wrap(objc.class.BSTableViewDataSource)
 end
 
-function create_delegate_class(ctx)
+function create_tableview_delegate_class(ctx, search_bar)
    local st = ctx.stack
 
    -- data source class
@@ -134,6 +134,13 @@ function create_delegate_class(ctx)
               function (self, cmd, table_view, index_path)
                  print("will select cell", table_view, index_path)
                  return index_path
+              end
+   )
+
+   add_method(ctx, objc.class.BSTableViewDelegate, 'scrollViewWillBeginDragging:', 'v@:@',
+              function (self, cmd, table_view)
+                 print("will drag", table_view)
+                 search_bar('resignFirstResponder')
               end
    )
 
