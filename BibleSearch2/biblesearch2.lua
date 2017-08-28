@@ -33,12 +33,13 @@ function init(viewController)
    local searchdel = searchdelegate('alloc')('init')
    searchbar('setDelegate:', -searchdel)
 
-   local delegate = create_tableview_delegate_class(ctx, searchbar)
+   local viewcntrl = ctx:wrap(viewController)
+   local delegate = create_tableview_delegate_class(ctx, searchbar, viewcntrl, bodyframe)
    local del = delegate('alloc')('init')
    tableview('setDelegate:', -del)
 
    rootview('addSubview:', -tableview)
-   ctx:wrap(viewController)('setView:', -rootview)
+   viewcntrl('setView:', -rootview)
 end
 
 function print_frame(st, frame, name)
@@ -116,7 +117,7 @@ function create_data_source_class(ctx)
    return ctx:wrap(objc.class.BSTableViewDataSource)
 end
 
-function create_tableview_delegate_class(ctx, search_bar)
+function create_tableview_delegate_class(ctx, search_bar, view_controller, frame)
    local st = ctx.stack
 
    -- data source class
@@ -127,6 +128,24 @@ function create_tableview_delegate_class(ctx, search_bar)
    add_method(ctx, objc.class.BSTableViewDelegate, 'tableView:didSelectRowAtIndexPath:', 'v@:@@',
               function (self, cmd, table_view, index_path)
                  print("selected cell", table_view, index_path)
+                 local child = ctx:wrap(objc.class.UIViewController)('new')
+                 local webview = ctx:wrap(objc.class.WKWebView)(
+                    'alloc')(
+                    'initWithFrame:configuration:',
+                    frame, -(ctx:wrap(objc.class.WKWebViewConfiguration)('new')))
+
+                 local rootview = ctx:wrap(objc.class.UIView)('new')
+
+                 rootview('setBackgroundColor:', -ctx:wrap(objc.class.UIColor)('whiteColor'))
+                 rootview('addSubview:', -webview)
+
+                 webview('loadHTMLString:baseURL:', '<font size="150">fujiko</font>',
+                         -(ctx:wrap(objc.class.NSURL)('URLWithString:', 'file://')))
+                 rootview('addSubview:', -webview)
+                 child('setView:', -rootview)
+                 -- view_controller("addChildViewController:", -child)
+                 view_controller("showViewController:sender:",
+                                 -child, -view_controller)
               end
    )
 

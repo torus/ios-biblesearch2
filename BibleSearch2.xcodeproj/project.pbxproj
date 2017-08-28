@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9C28B21C1F530A960096C0E9 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C28B21B1F530A960096C0E9 /* WebKit.framework */; };
 		9CF9C8B81F003B1B0013F9D0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF9C8B71F003B1B0013F9D0 /* main.m */; };
 		9CF9C8BB1F003B1B0013F9D0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF9C8BA1F003B1B0013F9D0 /* AppDelegate.m */; };
 		9CF9C8BE1F003B1B0013F9D0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF9C8BD1F003B1B0013F9D0 /* ViewController.m */; };
@@ -64,6 +65,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		9C28B21B1F530A960096C0E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		9CF9C8B31F003B1B0013F9D0 /* BibleSearch2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BibleSearch2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CF9C8B71F003B1B0013F9D0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9CF9C8B91F003B1B0013F9D0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C28B21C1F530A960096C0E9 /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -161,12 +164,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		9C28B21A1F530A960096C0E9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				9C28B21B1F530A960096C0E9 /* WebKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		9CF9C8AA1F003B1A0013F9D0 = {
 			isa = PBXGroup;
 			children = (
 				9CF9C8B51F003B1B0013F9D0 /* BibleSearch2 */,
 				9CF9C8CF1F003B1B0013F9D0 /* BibleSearch2Tests */,
 				9CF9C8B41F003B1B0013F9D0 /* Products */,
+				9C28B21A1F530A960096C0E9 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -630,6 +642,7 @@
 				9CF9C8D71F003B1B0013F9D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		9CF9C8D81F003B1B0013F9D0 /* Build configuration list for PBXNativeTarget "BibleSearch2Tests" */ = {
 			isa = XCConfigurationList;
@@ -638,6 +651,7 @@
 				9CF9C8DA1F003B1B0013F9D0 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
