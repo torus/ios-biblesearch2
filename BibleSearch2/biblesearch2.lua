@@ -139,8 +139,12 @@ function create_tableview_delegate_class(ctx, search_bar, view_controller, frame
                  rootview('setBackgroundColor:', -ctx:wrap(objc.class.UIColor)('whiteColor'))
                  rootview('addSubview:', -webview)
 
-                 webview('loadHTMLString:baseURL:', '<font size="150">fujiko</font>',
-                         -(ctx:wrap(objc.class.NSURL)('URLWithString:', 'file://')))
+                 local url = ctx:wrap(objc.class.NSBundle)('mainBundle')(
+                    'URLForResource:withExtension:', 'template', 'html')
+                 print("URL:", url('absoluteString'))
+                 webview('loadRequest:', -ctx:wrap(objc.class.NSURLRequest)('requestWithURL:', -url))
+                 -- webview('loadHTMLString:baseURL:', '<h1>fujiko</h1>',
+                 --            -(ctx:wrap(objc.class.NSURL)('URLWithString:', 'file://')))
                  rootview('addSubview:', -webview)
                  child('setView:', -rootview)
                  -- view_controller("addChildViewController:", -child)

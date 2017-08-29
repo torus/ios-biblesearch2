@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9C28B21C1F530A960096C0E9 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C28B21B1F530A960096C0E9 /* WebKit.framework */; };
+		9C28B21E1F55CC4D0096C0E9 /* template.html in Resources */ = {isa = PBXBuildFile; fileRef = 9C28B21D1F55CC4D0096C0E9 /* template.html */; };
 		9CF9C8B81F003B1B0013F9D0 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF9C8B71F003B1B0013F9D0 /* main.m */; };
 		9CF9C8BB1F003B1B0013F9D0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF9C8BA1F003B1B0013F9D0 /* AppDelegate.m */; };
 		9CF9C8BE1F003B1B0013F9D0 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9CF9C8BD1F003B1B0013F9D0 /* ViewController.m */; };
@@ -66,6 +67,7 @@
 
 /* Begin PBXFileReference section */
 		9C28B21B1F530A960096C0E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		9C28B21D1F55CC4D0096C0E9 /* template.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = template.html; sourceTree = "<group>"; };
 		9CF9C8B31F003B1B0013F9D0 /* BibleSearch2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BibleSearch2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9CF9C8B71F003B1B0013F9D0 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		9CF9C8B91F003B1B0013F9D0 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -209,6 +211,7 @@
 				9CF9C8C71F003B1B0013F9D0 /* Info.plist */,
 				9CF9C8B61F003B1B0013F9D0 /* Supporting Files */,
 				9CF9C93E1F0191D00013F9D0 /* biblesearch2.lua */,
+				9C28B21D1F55CC4D0096C0E9 /* template.html */,
 			);
 			path = BibleSearch2;
 			sourceTree = "<group>";
@@ -384,6 +387,7 @@
 				9CF9C8C31F003B1B0013F9D0 /* Assets.xcassets in Resources */,
 				9CF9C93F1F0191D00013F9D0 /* biblesearch2.lua in Resources */,
 				9CF9C8E01F003B9B0013F9D0 /* utils.lua in Resources */,
+				9C28B21E1F55CC4D0096C0E9 /* template.html in Resources */,
 				9CF9C8C11F003B1B0013F9D0 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
