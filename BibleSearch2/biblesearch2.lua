@@ -117,8 +117,27 @@ function create_data_source_class(ctx)
    return ctx:wrap(objc.class.BSTableViewDataSource)
 end
 
+function create_webview_delegate_class(ctx)
+   local st = ctx.stack
+
+   objc.push(st, 'BSWebViewDelegate')
+   objc.push(st, objc.class.NSObject)
+   objc.operate(st, 'addClass')
+
+   add_method(ctx, objc.class.BSWebViewDelegate, 'webView:decidePolicyForNavigationAction:decisionHandler:',
+	      'v@:@@@',
+	      function (self, cmd, web_view, action, handler)
+		 print(web_view, action, handler)
+	      end
+   )
+
+   return ctx:wrap(objc.class.BSWebViewDelegate)
+end
+
 function create_tableview_delegate_class(ctx, search_bar, view_controller, frame)
    local st = ctx.stack
+
+   local delecls = create_webview_delegate_class(ctx)
 
    -- data source class
    objc.push(st, 'BSTableViewDelegate')
@@ -133,6 +152,8 @@ function create_tableview_delegate_class(ctx, search_bar, view_controller, frame
                     'alloc')(
                     'initWithFrame:configuration:',
                     frame, -(ctx:wrap(objc.class.WKWebViewConfiguration)('new')))
+		 local dele = delecls('new')
+		 webview('setNavigationDelegate:', -dele)
 
                  local rootview = ctx:wrap(objc.class.UIView)('new')
 
