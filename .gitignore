@@ -1,2 +1,10 @@
 /luaobjc
 xcshareddata/
+xcuserdata/
+*.o
+*~
+*.so
+.DS_Store
+*_wrap.cpp
+*.idx
+*.pidx
