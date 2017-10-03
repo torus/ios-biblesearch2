@@ -117,17 +117,42 @@ function create_data_source_class(ctx)
    return ctx:wrap(objc.class.BSTableViewDataSource)
 end
 
-function create_webview_delegate_class(ctx)
+function create_webview_delegate_class(ctx, view_controller)
    local st = ctx.stack
 
    objc.push(st, 'BSWebViewDelegate')
    objc.push(st, objc.class.NSObject)
    objc.operate(st, 'addClass')
 
-   add_method(ctx, objc.class.BSWebViewDelegate, 'webView:decidePolicyForNavigationAction:decisionHandler:',
-	      'v@:@@@',
-	      function (self, cmd, web_view, action, handler)
-		 print(web_view, action, handler)
+   add_method(ctx, objc.class.BSWebViewDelegate, 'webView:shouldStartLoadWithRequest:navigationType:',
+	      'i@:@@i',
+	      function (self, cmd, webview, request, navtype)
+		 print('webView:shouldStartLoadWithRequest:navigationType:', webview, request, navtype)
+
+		 local url = ctx:wrap(request)('URL')
+		 local scheme, path = url('scheme'), url('path')
+		 print('URL', scheme, path)
+
+		 if path == "/back" then
+		    print('back!')
+		    local sel = objc.getselector('dismiss')
+		    print('onclick: BSWebViewDelegate instance', self)
+		    ctx:wrap(self)('performSelectorOnMainThread:withObject:waitUntilDone:',
+				   sel, webview, 0)
+		    return 0
+		 end
+
+		 return 1
+	      end
+   )
+
+   add_method(ctx, objc.class.BSWebViewDelegate, 'dismiss',
+	      'v@:@',
+	      function (self, cmd, webview)
+		 print('dismiss:', webview)
+		 print('dismiss: BSWebViewDelegate instance', self)
+
+                 view_controller("dismissViewControllerAnimated:completion:", 1, nil)
 	      end
    )
 
@@ -137,7 +162,7 @@ end
 function create_tableview_delegate_class(ctx, search_bar, view_controller, frame)
    local st = ctx.stack
 
-   local delecls = create_webview_delegate_class(ctx)
+   local delecls = create_webview_delegate_class(ctx, view_controller)
 
    -- data source class
    objc.push(st, 'BSTableViewDelegate')
@@ -148,12 +173,10 @@ function create_tableview_delegate_class(ctx, search_bar, view_controller, frame
               function (self, cmd, table_view, index_path)
                  print("selected cell", table_view, index_path)
                  local child = ctx:wrap(objc.class.UIViewController)('new')
-                 local webview = ctx:wrap(objc.class.WKWebView)(
-                    'alloc')(
-                    'initWithFrame:configuration:',
-                    frame, -(ctx:wrap(objc.class.WKWebViewConfiguration)('new')))
+                 local webview = ctx:wrap(objc.class.UIWebView)('alloc')('initWithFrame:', frame)
 		 local dele = delecls('new')
-		 webview('setNavigationDelegate:', -dele)
+		 webview('setDelegate:', -dele)
+		 print('BSWebViewDelegate instance', -dele)
 
                  local rootview = ctx:wrap(objc.class.UIView)('new')
 
@@ -164,13 +187,9 @@ function create_tableview_delegate_class(ctx, search_bar, view_controller, frame
                     'URLForResource:withExtension:', 'template', 'html')
                  print("URL:", url('absoluteString'))
                  webview('loadRequest:', -ctx:wrap(objc.class.NSURLRequest)('requestWithURL:', -url))
-                 -- webview('loadHTMLString:baseURL:', '<h1>fujiko</h1>',
-                 --            -(ctx:wrap(objc.class.NSURL)('URLWithString:', 'file://')))
                  rootview('addSubview:', -webview)
                  child('setView:', -rootview)
-                 -- view_controller("addChildViewController:", -child)
-                 view_controller("showViewController:sender:",
-                                 -child, -view_controller)
+                 view_controller("presentViewController:animated:completion:", -child, 1, nil)
               end
    )
 
