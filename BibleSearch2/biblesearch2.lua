@@ -1,6 +1,9 @@
 UITableViewStylePlain = 0
 UITableViewCellStyleDefault = 0
 
+local index
+local source_file
+
 function init(viewController)
    print("init", viewController)
 
@@ -40,6 +43,17 @@ function init(viewController)
 
    rootview('addSubview:', -tableview)
    viewcntrl('setView:', -rootview)
+
+   -- Suffix Array
+   print('sufarr', sufarr)
+
+   local bundle = ctx:wrap(objc.class.NSBundle)('mainBundle')
+   local idxpath = bundle('pathForResource:ofType:', 'kjv', 'idx')
+   local srcpath = bundle('pathForResource:ofType:', 'kjv', 'txt')
+   print('index', idxpath, srcpath)
+
+   index = sufarr.load_index(idxpath, srcpath)
+   source_file = io.open(srcpath)
 end
 
 function print_frame(st, frame, name)
@@ -61,7 +75,6 @@ end
 function create_searchbar_delegate_class(ctx)
    local st = ctx.stack
 
-   -- data source class
    objc.push(st, 'BSSearchBarDelegate')
    objc.push(st, objc.class.NSObject)
    objc.operate(st, 'addClass')
@@ -69,6 +82,19 @@ function create_searchbar_delegate_class(ctx)
    add_method(ctx, objc.class.BSSearchBarDelegate, 'searchBar:textDidChange:', 'v@:@@',
               function (self, cmd, search_bar, search_text)
                  print ('search', search_text)
+		 local lb = sufarr.search_lower_bound(index, search_text)
+		 local ub = sufarr.search_upper_bound(index, search_text)
+
+		 print (string.format ("%s - %s", lb, ub))
+
+		 local i = lb
+		 while i < math.min(ub, lb + 10) do
+		    local p = sufarr.get_position (index, i)
+		    source_file:seek ("set", p)
+		    local str = source_file:read ()
+		    print (string.format ("%d: %s", p, str))
+		    i = i + 1
+		 end
               end
    )
 

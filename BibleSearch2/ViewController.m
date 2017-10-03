@@ -19,8 +19,11 @@
 
 @implementation ViewController
 
+int luaopen_sufarr(lua_State* L);
+
 - (void)startLua {
     lua_State *L = [[LuaBridge instance] L];
+    luaopen_sufarr(L);
     NSString *filename = [[NSBundle mainBundle] pathForResource:@"biblesearch2" ofType:@"lua"];
     if (luaL_dofile(L, [filename UTF8String])) {
         NSLog(@"Failed to load: %@: %s", filename, lua_tostring(L, -1));
