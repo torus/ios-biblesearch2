@@ -121,10 +121,10 @@ function create_data_source_class(ctx)
 
    add_method(ctx, objc.class.BSTableViewDataSource, 'tableView:cellForRowAtIndexPath:', '@@:@@',
               function (self, cmd, table_view, index_path)
-                 print("cell", table_view, index_path)
+                 -- print("cell", table_view, index_path)
                  local ctx = objc.context:create()
                  local index = ctx:wrap(index_path)
-                 print("index", index('section'), index('row'))
+                 -- print("index", index('section'), index('row'))
                  local cell = ctx:wrap(objc.class.UITableViewCell)('alloc')(
                     'initWithStyle:reuseIdentifier:', UITableViewCellStyleDefault, 'hoge')
 
