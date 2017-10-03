@@ -1,8 +1,10 @@
 UITableViewStylePlain = 0
 UITableViewCellStyleDefault = 0
 
-local index
+local document_index
 local source_file
+local result_upper_bound = 0
+local result_lower_bound = 0
 
 function init(viewController)
    print("init", viewController)
@@ -32,7 +34,7 @@ function init(viewController)
    local headerframe = make_frame(st, 0, 0, w, 44)
    local searchbar = ctx:wrap(objc.class.UISearchBar)('alloc')('initWithFrame:', headerframe)
    tableview('setTableHeaderView:', -searchbar)
-   local searchdelegate = create_searchbar_delegate_class(ctx)
+   local searchdelegate = create_searchbar_delegate_class(ctx, tableview)
    local searchdel = searchdelegate('alloc')('init')
    searchbar('setDelegate:', -searchdel)
 
@@ -52,7 +54,7 @@ function init(viewController)
    local srcpath = bundle('pathForResource:ofType:', 'kjv', 'txt')
    print('index', idxpath, srcpath)
 
-   index = sufarr.load_index(idxpath, srcpath)
+   document_index = sufarr.load_index(idxpath, srcpath)
    source_file = io.open(srcpath)
 end
 
@@ -72,7 +74,7 @@ function add_method(ctx, cls, name, signature, proc)
    objc.operate(st, 'addMethod')
 end
 
-function create_searchbar_delegate_class(ctx)
+function create_searchbar_delegate_class(ctx, table_view)
    local st = ctx.stack
 
    objc.push(st, 'BSSearchBarDelegate')
@@ -82,19 +84,20 @@ function create_searchbar_delegate_class(ctx)
    add_method(ctx, objc.class.BSSearchBarDelegate, 'searchBar:textDidChange:', 'v@:@@',
               function (self, cmd, search_bar, search_text)
                  print ('search', search_text)
-		 local lb = sufarr.search_lower_bound(index, search_text)
-		 local ub = sufarr.search_upper_bound(index, search_text)
 
-		 print (string.format ("%s - %s", lb, ub))
+		 if search_text == "" then
+		    result_upper_bound = 0
+		    result_lower_bound = 0
+		 else
+		    local lb = sufarr.search_lower_bound(document_index, search_text)
+		    local ub = sufarr.search_upper_bound(document_index, search_text)
 
-		 local i = lb
-		 while i < math.min(ub, lb + 10) do
-		    local p = sufarr.get_position (index, i)
-		    source_file:seek ("set", p)
-		    local str = source_file:read ()
-		    print (string.format ("%d: %s", p, str))
-		    i = i + 1
+		    print (string.format ("%s - %s", lb, ub))
+		    result_lower_bound = lb
+		    result_upper_bound = ub
 		 end
+
+		 table_view('reloadData')
               end
    )
 
@@ -124,7 +127,14 @@ function create_data_source_class(ctx)
                  print("index", index('section'), index('row'))
                  local cell = ctx:wrap(objc.class.UITableViewCell)('alloc')(
                     'initWithStyle:reuseIdentifier:', UITableViewCellStyleDefault, 'hoge')
-                 cell('textLabel')('setText:', 'ahoaho' .. index('section') .. index('row'))
+
+		 local num = index('row')
+		 local p = sufarr.get_position(document_index, result_lower_bound + num)
+		 source_file:seek ("set", p)
+		 local str = source_file:read()
+
+                 cell('textLabel')('setText:', str)
+                 -- cell('textLabel')('setText:', 'ahoaho' .. index('section') .. index('row'))
                  return -cell
               end
    )
@@ -133,7 +143,7 @@ function create_data_source_class(ctx)
               function (self, cmd, view, section)
                  print("num of rows", section)
                  if section < 1 then
-                    return 5
+                    return result_upper_bound - result_lower_bound
                  else
                     return 0
                  end
