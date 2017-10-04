@@ -27,20 +27,20 @@ function init(viewController)
       'initWithFrame:style:', bodyframe, UITableViewStylePlain)
 
    local datasrccls = create_data_source_class(ctx)
-   local src = datasrccls('alloc')('init')
+   local src = datasrccls('new')
    tableview('setDataSource:', -src)
 
    -- search bar
    local headerframe = make_frame(st, 0, 0, w, 44)
    local searchbar = ctx:wrap(objc.class.UISearchBar)('alloc')('initWithFrame:', headerframe)
-   tableview('setTableHeaderView:', -searchbar)
    local searchdelegate = create_searchbar_delegate_class(ctx, tableview)
-   local searchdel = searchdelegate('alloc')('init')
+   local searchdel = searchdelegate('new')
    searchbar('setDelegate:', -searchdel)
+   tableview('setTableHeaderView:', -searchbar)
 
    local viewcntrl = ctx:wrap(viewController)
    local delegate = create_tableview_delegate_class(ctx, searchbar, viewcntrl, bodyframe)
-   local del = delegate('alloc')('init')
+   local del = delegate('new')
    tableview('setDelegate:', -del)
 
    rootview('addSubview:', -tableview)
@@ -134,7 +134,6 @@ function create_data_source_class(ctx)
 		 local str = source_file:read()
 
                  cell('textLabel')('setText:', str)
-                 -- cell('textLabel')('setText:', 'ahoaho' .. index('section') .. index('row'))
                  return -cell
               end
    )
