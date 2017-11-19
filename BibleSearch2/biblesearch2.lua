@@ -5,6 +5,7 @@ local document_index
 local source_file
 local result_upper_bound = 0
 local result_lower_bound = 0
+local index_position_map = {}
 
 function init(viewController)
    print("init", viewController)
@@ -133,6 +134,8 @@ function create_data_source_class(ctx)
 		 source_file:seek ("set", p)
 		 local str = source_file:read()
 
+		 index_position_map[num] = p
+
                  cell('textLabel')('setText:', str)
                  return -cell
               end
@@ -217,6 +220,22 @@ function create_tableview_delegate_class(ctx, search_bar, view_controller, frame
 
                  rootview('setBackgroundColor:', -ctx:wrap(objc.class.UIColor)('whiteColor'))
                  rootview('addSubview:', -webview)
+
+                 local row = ctx:wrap(index_path)('row')
+                 local p = index_position_map[row]
+                 print('row', row, p)
+
+                 while p > 0 do
+                    source_file:seek ("set", p)
+                    local ch = source_file:read(1)
+                    if ch == '\n' then
+                       p = p + 1
+                       break
+                    end
+                    p = p - 1
+                 end
+                 local text = source_file:read()
+                 print("text", text)
 
                  local url = ctx:wrap(objc.class.NSBundle)('mainBundle')(
                     'URLForResource:withExtension:', 'template', 'html')
