@@ -229,7 +229,6 @@ function create_tableview_delegate_class(ctx, search_bar, view_controller, frame
                     source_file:seek ("set", p)
                     local ch = source_file:read(1)
                     if ch == '\n' then
-                       p = p + 1
                        break
                     end
                     p = p - 1
