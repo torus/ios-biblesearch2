@@ -188,6 +188,7 @@ function create_webview_delegate_class(ctx, view_controller)
                     local jsexp = string.format("setContent(%q, %q)", verse, text)
                     print("executing:", jsexp)
                     ctx:wrap(webview)('stringByEvaluatingJavaScriptFromString:', jsexp)
+                    return 0
 		 end
 
 		 return 1
