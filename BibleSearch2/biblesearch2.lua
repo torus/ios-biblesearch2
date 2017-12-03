@@ -185,8 +185,7 @@ function create_webview_delegate_class(ctx, view_controller)
 		    return 0
 		 elseif path == "/ready" then
                     local verse, text = string.match(tbl.text, "^([^%s]+)%s+(.*)$")
-                    local jsexp = "setContent(" .. string.format("%q", verse) .. ", "
-                       .. string.format("%q", text) .. ")"
+                    local jsexp = string.format("setContent(%q, %q)", verse, text)
                     print("executing:", jsexp)
                     ctx:wrap(webview)('stringByEvaluatingJavaScriptFromString:', jsexp)
 		 end
