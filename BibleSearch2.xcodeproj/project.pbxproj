@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		9C28B21C1F530A960096C0E9 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C28B21B1F530A960096C0E9 /* WebKit.framework */; };
 		9C28B21E1F55CC4D0096C0E9 /* template.html in Resources */ = {isa = PBXBuildFile; fileRef = 9C28B21D1F55CC4D0096C0E9 /* template.html */; };
+		9CB8CAE71FD45DB40079703C /* ios in Resources */ = {isa = PBXBuildFile; fileRef = 9CB8CAE61FD45DB40079703C /* ios */; };
 		9CE4883F1F83E7E500856E51 /* sufarr.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CE4883D1F83E7E500856E51 /* sufarr.cpp */; };
 		9CE488411F83E8B500856E51 /* sufarr_wrap.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9CE488401F83E8B500856E51 /* sufarr_wrap.cpp */; };
 		9CE488451F83EA1C00856E51 /* kjv.pidx in Resources */ = {isa = PBXBuildFile; fileRef = 9CE488421F83EA1C00856E51 /* kjv.pidx */; };
@@ -73,6 +74,7 @@
 /* Begin PBXFileReference section */
 		9C28B21B1F530A960096C0E9 /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		9C28B21D1F55CC4D0096C0E9 /* template.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = template.html; sourceTree = "<group>"; };
+		9CB8CAE61FD45DB40079703C /* ios */ = {isa = PBXFileReference; lastKnownFileType = folder; name = ios; path = icon/icon/ios; sourceTree = SOURCE_ROOT; };
 		9CE4883D1F83E7E500856E51 /* sufarr.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sufarr.cpp; path = sufarr/sufarr.cpp; sourceTree = "<group>"; };
 		9CE4883E1F83E7E500856E51 /* sufarr_c_api.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = sufarr_c_api.h; path = sufarr/sufarr_c_api.h; sourceTree = "<group>"; };
 		9CE488401F83E8B500856E51 /* sufarr_wrap.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = sufarr_wrap.cpp; path = sufarr/sufarr_wrap.cpp; sourceTree = "<group>"; };
@@ -217,6 +219,7 @@
 		9CF9C8B51F003B1B0013F9D0 /* BibleSearch2 */ = {
 			isa = PBXGroup;
 			children = (
+				9CB8CAE61FD45DB40079703C /* ios */,
 				9CE488441F83EA1C00856E51 /* kjv.idx */,
 				9CE488421F83EA1C00856E51 /* kjv.pidx */,
 				9CE488431F83EA1C00856E51 /* kjv.txt */,
@@ -412,6 +415,7 @@
 				9CE488461F83EA1C00856E51 /* kjv.txt in Resources */,
 				9CF9C8C61F003B1B0013F9D0 /* LaunchScreen.storyboard in Resources */,
 				9CF9C8C31F003B1B0013F9D0 /* Assets.xcassets in Resources */,
+				9CB8CAE71FD45DB40079703C /* ios in Resources */,
 				9CF9C93F1F0191D00013F9D0 /* biblesearch2.lua in Resources */,
 				9CF9C8E01F003B9B0013F9D0 /* utils.lua in Resources */,
 				9C28B21E1F55CC4D0096C0E9 /* template.html in Resources */,
