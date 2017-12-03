@@ -159,8 +159,7 @@ function create_webview_delegate_class(ctx, view_controller)
    local st = ctx.stack
 
    objc.push(st, 'BSWebViewDelegate')
-   objc.push(st, objc.class.NSObject)
-   objc.operate(st, 'addClass')
+   objc.operate(st, 'addLuaBridgedClass')
 
    add_method(ctx, objc.class.BSWebViewDelegate, 'webView:shouldStartLoadWithRequest:navigationType:',
 	      'i@:@@i',
@@ -171,6 +170,12 @@ function create_webview_delegate_class(ctx, view_controller)
 		 local scheme, path = url('scheme'), url('path')
 		 print('URL', scheme, path)
 
+                 objc.push(ctx.stack, self)
+                 objc.operate(ctx.stack, 'getLuaTable')
+                 local tbl = objc.pop(st)
+
+                 print("WebView Delegate", tbl.text)
+
 		 if path == "/back" then
 		    print('back!')
 		    local sel = objc.getselector('dismiss')
@@ -178,6 +183,12 @@ function create_webview_delegate_class(ctx, view_controller)
 		    ctx:wrap(self)('performSelectorOnMainThread:withObject:waitUntilDone:',
 				   sel, webview, 0)
 		    return 0
+		 elseif path == "/ready" then
+                    local verse, text = string.match(tbl.text, "^([^%s]+)%s+(.*)$")
+                    local jsexp = "setContent(" .. string.format("%q", verse) .. ", "
+                       .. string.format("%q", text) .. ")"
+                    print("executing:", jsexp)
+                    ctx:wrap(webview)('stringByEvaluatingJavaScriptFromString:', jsexp)
 		 end
 
 		 return 1
@@ -235,6 +246,10 @@ function create_tableview_delegate_class(ctx, search_bar, view_controller, frame
                  end
                  local text = source_file:read()
                  print("text", text)
+                 
+                 objc.push(ctx.stack, -dele)
+                 objc.push(ctx.stack, {text = text})
+                 objc.operate(ctx.stack, 'setLuaTable')
 
                  local url = ctx:wrap(objc.class.NSBundle)('mainBundle')(
                     'URLForResource:withExtension:', 'template', 'html')
